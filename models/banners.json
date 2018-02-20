@@ -1,0 +1,7 @@
+{
+    "image":"string",
+    "title":"string",
+    "description":"string",
+    "isactive":"bool",
+    "languge":"string"
+}
