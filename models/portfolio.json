@@ -1,0 +1,8 @@
+{
+    "iamge" : "string",
+    "title" : "string",
+    "platforms" : "string",
+    "gallery" : "string",
+    "languege" : "string",
+    "isactive" : "bool"
+}

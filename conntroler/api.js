@@ -1,5 +1,10 @@
 const body_parser = require('body-parser');
 const BannersRouter = require('./banners');
+const ServiceRouter = require('./service');
+const GeneralRouter = require('./general');
+const ServiceDescriptionRouter = require('./service_description');
+const PortfolioRouter = require('./portfolio');
+
 const db = require('../database/db');
 const logger = require('morgan');
 const cors = require('cors');
@@ -17,8 +22,11 @@ class API {
         app.use(logger('dev'));
         app.use(cors());
         app.use('/banners',BannersRouter);
+        app.use('/service',ServiceRouter);
+        app.use('/general',GeneralRouter);
+        app.use('/service_description',ServiceDescriptionRouter);
+        app.use('/portfolio',PortfolioRouter);
     }
-
 };
 
 module.exports = new API();

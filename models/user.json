@@ -1,0 +1,41 @@
+{
+    "e_mail_concat" : "@mail.ru",
+    "e_mail_hr" : "hr",
+    "e_mail_info" : "info",
+    "service_description" : [
+        {
+            "description" : "string",
+            "languege" : "string"
+        }
+    ],
+    "service": [
+        {
+            "_id" : 0,
+            "image":"",
+            "title":"",
+            "description":"",
+            "isactive":true,
+            "languege" : "arm"
+        }
+    ],
+    "banners" : [
+        {
+            "_id" : 0,
+            "image":"",
+            "title":"",
+            "description":"",
+            "isactive":true,
+            "languege" : "arm"
+        }
+    ],
+    "portfolio":[
+        {
+            "iamge" : "string",
+            "title" : "string",
+            "platforms" : "string",
+            "gallery" : "string",
+            "languege" : "string",
+            "isactive" : "bool"
+        }
+    ]
+}

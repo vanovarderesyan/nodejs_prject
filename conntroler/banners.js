@@ -2,8 +2,8 @@ const BannersRouter = require("express").Router();
 const BannersService = require('../service/banners.service');
 const upload = require('./multer/upload');
 
-BannersRouter.get('/:languge', (req, res) => {
-    BannersService.get(req.params.languge)
+BannersRouter.get('/:languege', (req, res) => {
+    BannersService.get(req.params.languege)
     .then((result)=>{
         res.send(result);
     })
@@ -23,8 +23,18 @@ BannersRouter.get('/', (req, res) => {
         })
 });
 
-BannersRouter.post('/add',upload.upload.single('file'), (req, res) => {
-    BannersService.add(req)
+BannersRouter.post('/add', (req, res) => {
+    BannersService.addObject(req)
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        res.send(err);
+    })
+});
+
+BannersRouter.post('/add/file',upload.upload.single('file'), (req, res) => {
+    BannersService.addObjectAndFile(req)
     .then((result)=>{
         res.send(result);
     })
@@ -43,8 +53,18 @@ BannersRouter.delete('/',(req,res)=>{
     })
 });
 
-BannersRouter.put('/',upload.upload.single('file'),(req,res)=>{
+BannersRouter.put('/',(req,res)=>{
     BannersService.edit(req)
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        res.send(err);
+    })
+})
+
+BannersRouter.put('/file',upload.upload.single('file'),(req,res)=>{
+    BannersService.editFile(req)
     .then((result)=>{
         res.send(result);
     })
