@@ -4,12 +4,35 @@ const objectId = require('mongodb').ObjectId;
 
 class GalleryService{
 
-    add(){
+    add(obj,id){
+        return new Promise((resolve,reject)=>{
+            obj._id = objectId();
+            collection.update({ 'portfolio._id' :objectId(id) },{$push:{'portfolio.$.gallery' : obj}},(err)=>{
+                if(err){
+                    throw err;
 
+                    reject(err)
+                }else{
+                    resolve({
+                        status : 'ok'
+                    })
+                }
+            })
+        })
     }
 
-    remove(){
-
+    remove(portfolioId,removeId){
+        return new Promise((resolve,reject)=>{
+            collection.update({'portfolio._id' : objectId(portfolioId)},{$pull : {'portfolio.$.gallery' :{_id: objectId(removeId)}}},(err)=>{
+                if(err){
+                    reject(err);
+                }else{
+                    resolve({
+                        status : 'ok'
+                    })
+                }
+            })
+        })
     }
 
     edit(){

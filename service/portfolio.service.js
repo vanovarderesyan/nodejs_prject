@@ -10,7 +10,7 @@ class PorfolioService{
     get(languege){
         return new Promise((resolve, reject) => {
             collection.aggregate([
-                { $match: {} }, // Only look at Luke Skywalker
+                { $match: {} }, 
                 {
                     $graphLookup: {
                         from: 'information',
