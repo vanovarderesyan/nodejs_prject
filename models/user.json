@@ -32,8 +32,15 @@
         {
             "iamge" : "string",
             "title" : "string",
-            "platforms" : "string",
-            "gallery" : "string",
+            "tags" : [],
+            "platforms" : [],
+            "gallery" : [
+                {
+                    "_id" : "",
+                    "image" : "url",
+                    "isactive" : "bool"
+                } 
+            ],
             "languege" : "string",
             "isactive" : "bool"
         }

@@ -1,8 +1,9 @@
 {
     "iamge" : "string",
     "title" : "string",
-    "platforms" : "string",
-    "gallery" : "string",
+    "platforms" : [],
+    "gallery" : [],
     "languege" : "string",
-    "isactive" : "bool"
+    "isactive" : "bool",
+    "tags" : []
 }

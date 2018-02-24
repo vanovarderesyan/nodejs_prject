@@ -50,7 +50,7 @@ class GetPromis {
         })
     }
 
-    addObject(obj,keys,models){
+    addObject(obj, keys, models) {
         console.log('sdfg')
         return new Promise((res, rej) => {
             models._id = objectId();
@@ -69,12 +69,13 @@ class GetPromis {
                     })
                 } else {
                     res({
-                        status: 'ok'
+                        status: 'ok',
+                        _id : models._id
                     })
                 }
             })
 
-        }) 
+        })
     }
 
     addObjectAndFile(obj, keys, models) {
@@ -95,7 +96,8 @@ class GetPromis {
                     })
                 } else {
                     res({
-                        status: 'ok'
+                        status: 'ok',
+                        _id : models._id
                     })
                 }
             })
@@ -122,26 +124,19 @@ class GetPromis {
         })
     }
 
-    edit(req, keys) {
+    edit(req, keys,ObjectUpdate,id) {
         return new Promise((res, rej) => {
-            collection.findOne({ _id: objectId('5a8d1e233675e71901945418') }, (err, result) => {
-                let banners = getBanners(result[keys], req.body.id, req);
-                if (!banners) {
-                    rej({
-                        status: 'faild',
-                    })
-                }
-                let idArray = `${keys}._id`;
-                let idObj = { _id: objectId('5a8d1e233675e71901945418') };
-                let ObjectUpdate = {};
-
-                idObj[`${keys}._id`] = objectId(req.body.id);
-                ObjectUpdate[`${keys}.$.title`] = (req.body.title) ? req.body.title : banners.title;
-                ObjectUpdate[`${keys}.$.description`] = (req.body.description) ? req.body.description : banners.description;
-                ObjectUpdate[`${keys}.$.isactive`] = (req.body.isactive) ? req.body.isactive : banners.isactive;
-                ObjectUpdate[`${keys}.$.languege`] = (req.body.languege) ? req.body.languege : banners.languege;
-
-                collection.update(idObj, { $set: ObjectUpdate }, (err) => {
+            let idArray = `${keys}._id`;
+            let idObj = { _id: objectId('5a8fd2c33d6d2422170ae68b') };
+            idObj[`${keys}._id`] = objectId(id);
+            (req.body.title) ? ObjectUpdate[`${keys}.$.title`] = req.body.title : false;
+            (req.body.description) ? ObjectUpdate[`${keys}.$.description`] = req.body.description : false;
+            (req.body.isactive) ? ObjectUpdate[`${keys}.$.isactive`] = req.body.isactive : false;
+            (req.body.languege) ? ObjectUpdate[`${keys}.$.languege`] = req.body.languege : false;
+            collection.update(idObj,
+                {
+                    $set: ObjectUpdate
+                }, (err) => {
                     if (err) {
                         rej({
                             status: 'faild',
@@ -152,47 +147,35 @@ class GetPromis {
                         })
                     }
                 });
-            })
-
         })
     }
 
-    editFile(req, keys) {
+    editFile(req, keys,ObjectUpdate,id) {
+        console.log('editFile');
         return new Promise((res, rej) => {
-            collection.findOne({ _id: objectId('5a8d1e233675e71901945418') }, (err, result) => {
-                let banners = getBanners(result[keys], req.body.id, req.file.path);
-
-                console.log(banners);
-                if (!banners) {
-                    rej({
-                        status: 'faild',
-                    })
-                }
-                let idArray = `${keys}._id`;
-                let idObj = { _id: objectId('5a8d1e233675e71901945418') };
-                idObj[`${keys}._id`] = objectId(req.body.id);
-                let ObjectUpdate = {};
-                ObjectUpdate[`${keys}.$.title`] = (req.body.title) ? req.body.title : banners.title;
-                ObjectUpdate[`${keys}.$.description`] = (req.body.description) ? req.body.description : banners.description;
-                ObjectUpdate[`${keys}.$.isactive`] = (req.body.isactive) ? req.body.isactive : banners.isactive;
-                ObjectUpdate[`${keys}.$.languege`] = (req.body.languege) ? req.body.languege : banners.languege;
-                ObjectUpdate[`${keys}.$.image`] = req.file.path;
-                collection.update(idObj,
-                    {
-                        $set: ObjectUpdate
-                    }, (err) => {
-                        if (err) {
-                            rej({
-                                status: 'faild',
-                            });
-                        } else {
-                            res({
-                                status: 'ok'
-                            })
-                        }
-                    });
-            })
-
+            let idArray = `${keys}._id`;
+            let idObj = { _id: objectId('5a8fd2c33d6d2422170ae68b') };
+            idObj[`${keys}._id`] = objectId(id);
+            (req.body.title) ? ObjectUpdate[`${keys}.$.title`] = req.body.title : false;
+            (req.body.description) ? ObjectUpdate[`${keys}.$.description`] = req.body.description : false;
+            (req.body.isactive) ? ObjectUpdate[`${keys}.$.isactive`] = req.body.isactive : false;
+            (req.body.languege) ? ObjectUpdate[`${keys}.$.languege`] = req.body.languege : false;
+            ObjectUpdate[`${keys}.$.image`] = req.file.path;
+            console.log(ObjectUpdate)
+            collection.update(idObj,
+                {
+                    $set: ObjectUpdate
+                }, (err) => {
+                    if (err) {
+                        rej({
+                            status: 'faild',
+                        });
+                    } else {
+                        res({
+                            status: 'ok'
+                        })
+                    }
+                });
         })
     }
 }
