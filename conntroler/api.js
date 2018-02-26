@@ -5,6 +5,8 @@ const GeneralRouter = require('./general');
 const ServiceDescriptionRouter = require('./service_description');
 const PortfolioRouter = require('./portfolio');
 const GalleryRouter = require('./gallery');
+const TagsRouter = require('./tags');
+const PlatformRouter = require('./platform');
 const db = require('../database/db');
 const logger = require('morgan');
 const cors = require('cors');
@@ -27,6 +29,8 @@ class API {
         app.use('/service_description',ServiceDescriptionRouter);
         app.use('/portfolio',PortfolioRouter);
         app.use('/gallery',GalleryRouter);
+        app.use('/tags',TagsRouter);
+        app.use('/platform',PlatformRouter);
     }
 };
 

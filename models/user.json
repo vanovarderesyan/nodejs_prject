@@ -44,5 +44,7 @@
             "languege" : "string",
             "isactive" : "bool"
         }
-    ]
+    ],
+    "tags" : [],
+    "platform" : []
 }
