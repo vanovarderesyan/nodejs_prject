@@ -53,7 +53,6 @@ PortfolioRouter.put('/:id',(req,res)=>{
 })
 
 PortfolioRouter.put('/edit/file',upload.upload.single('file'),(req,res)=>{
-    console.log('editRoute')
     PortfolioService.editFile(req)
     .then((result)=>{
         res.send(result);
@@ -73,4 +72,13 @@ PortfolioRouter.delete('/',(req,res)=>{
     })
 })
 
+PortfolioRouter.delete('/tags',(req,res)=>{
+    PortfolioService.removeTagsByValue(req.body.id)
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        res.send(err);
+    })
+})
 module.exports = PortfolioRouter;

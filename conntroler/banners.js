@@ -2,6 +2,17 @@ const BannersRouter = require("express").Router();
 const BannersService = require('../service/banners.service');
 const upload = require('./multer/upload');
 
+
+const validateBanners = require('./middleware_validate/banners.validate');
+BannersRouter.use('/',(req,res,next)=>{
+    validateBanners(req,res,next);
+})
+BannersRouter.use('/:id',(req,res,next)=>{
+    console.log(req.params.id);
+    next();
+})
+
+
 BannersRouter.get('/:languege', (req, res) => {
     BannersService.get(req.params.languege)
     .then((result)=>{
@@ -15,7 +26,6 @@ BannersRouter.get('/:languege', (req, res) => {
 BannersRouter.get('/', (req, res) => {
     BannersService.getAll()
         .then((result)=>{
-            console.log(result.result);
             res.send(result);
         })
         .catch((err)=>{
@@ -33,7 +43,7 @@ BannersRouter.post('/add', (req, res) => {
     })
 });
 
-BannersRouter.post('/add/file',upload.upload.single('file'), (req, res) => {
+BannersRouter.post('/add/file',upload.upload.array('photos', 12), (req, res) => {
     BannersService.addObjectAndFile(req)
     .then((result)=>{
         res.send(result);

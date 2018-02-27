@@ -32,7 +32,7 @@
         {
             "iamge" : "string",
             "title" : "string",
-            "tags" : [],
+            "tags" : ["_id1","_id2"],
             "platforms" : [],
             "gallery" : [
                 {
@@ -45,6 +45,16 @@
             "isactive" : "bool"
         }
     ],
-    "tags" : [],
-    "platform" : []
+    "tags" : [
+        {
+        "description" : "",
+        "title" : ""
+        }
+    ],
+    "platform" : [
+        {
+        "description" : "",
+        "title" : "" 
+        }
+    ]
 }

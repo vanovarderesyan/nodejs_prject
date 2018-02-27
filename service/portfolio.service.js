@@ -4,13 +4,14 @@ const objectId = require('mongodb').ObjectId;
 const GetPromis = require('../promise/Promis');
 const models = require('../models/portfolio.json');
 const empty = require('is-empty');
+const _ = require('lodash');
 
 
-class PorfolioService{
-    get(languege){
+class PorfolioService {
+    get(languege) {
         return new Promise((resolve, reject) => {
             collection.aggregate([
-                { $match: {} }, 
+                { $match: {} },
                 {
                     $graphLookup: {
                         from: 'information',
@@ -35,10 +36,10 @@ class PorfolioService{
         })
     }
 
-    getAll(){
+    getAll() {
         return new Promise((resolve, reject) => {
             collection.aggregate([
-                { $match: {} }, // Only look at Luke Skywalker
+                { $match: {} },
                 {
                     $graphLookup: {
                         from: 'information',
@@ -51,7 +52,7 @@ class PorfolioService{
                 { $project: { 'portfolio': 1 } }
             ])
                 .then((result) => {
-                        resolve(result);
+                    resolve(result);
                 })
                 .catch((err) => (
                     reject(err)
@@ -59,35 +60,70 @@ class PorfolioService{
         })
     }
 
-    add(keys,req){
+    add(keys, req) {
         models.tags = req.body.tags;
         models.platforms = req.body.platforms;
-        return GetPromis.addObject(req,'portfolio',models);
+        return GetPromis.addObject(req, 'portfolio', models);
     }
 
-    addFile(keys,req){
-        (req.body.platforms) ? models.platforms = (req.body.platforms).split(',') :models.platforms = [];
+    addFile(keys, req) {
+        (req.body.platforms) ? models.platforms = (req.body.platforms).split(',') : models.platforms = [];
         (req.body.tags) ? models.tags = (req.body.tags).split(',') : models.tags = [];
-        return GetPromis.addObjectAndFile(req,'portfolio',models)
+         return GetPromis.addObjectAndFile(req, 'portfolio', models)
     }
-
-    edit(req){
+            
+    edit(req) {
         let obj = {};
         (req.body.tags) ? obj['portfolio.$.title'] = req.body.title : false;
         (req.body.platforms) ? obj['portfolio.$.platforms'] = req.body.platforms : false;
-        return GetPromis.edit(req,'portfolio',obj,req.params.id);
+        return GetPromis.edit(req, 'portfolio', obj, req.params.id);
     }
 
-    editFile(req){
+    editFile(req) {
         let obj = {};
         (req.body.tags) ? obj['portfolio.$.tags'] = (req.body.tags).split(',') : false;
         (req.body.platforms) ? obj['portfolio.$.platforms'] = (req.body.platforms).split(',') : false;
-        return GetPromis.editFile(req,'portfolio',obj,req.body.id);
+        return GetPromis.editFile(req, 'portfolio', obj, req.body.id);
     }
 
-    remove(keys,id){
-        return GetPromis.remove(id,'portfolio');
+    remove(keys, id) {
+        return GetPromis.remove(id, 'portfolio');
     }
+
+    removeTagsByValue(value) {
+        return new Promise((resolve, reject) => {
+            this.getAll()
+                .then((result) => {
+                    let listId = _.map(result[0].portfolio, '_id');
+                    for (let i in listId) {
+                        collection.update(
+                            { 'portfolio._id': objectId(listId[i]) },
+                            { $pull: { 'portfolio.$.tags': { $in: [value] } } }, (err) => {
+                                if (err) {
+                                    reject({
+                                        status: 'faild',
+                                        err
+                                    })
+                                } else {
+                                    resolve({
+                                        status: 'ok'
+                                    })
+                                }
+                            }
+                        )
+
+                    }
+                })
+                .catch((err) => {
+                    reject({
+                        status: 'faild',
+                        err
+                    })
+                })
+        })
+
+    }
+
 }
 
 module.exports = new PorfolioService;

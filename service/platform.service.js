@@ -1,5 +1,3 @@
-import { resolve } from 'path';
-
 const db = require('../database/db');
 const collection = db.get('information');
 const objectId = require('mongodb').ObjectId;

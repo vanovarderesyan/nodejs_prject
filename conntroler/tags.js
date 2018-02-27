@@ -3,7 +3,7 @@ const TagsService = require('../service/tags.service');
 
 
 TagsRouter.post('/',(req,res)=>{
-    TagsService.add()
+    TagsService.add(req)
     .then((result)=>{
         res.send(result);
     })
@@ -13,7 +13,7 @@ TagsRouter.post('/',(req,res)=>{
 })
 
 TagsRouter.put('/',(req,res)=>{
-    TagsService.edit()
+    TagsService.edit(req)
     .then((result)=>{
         res.send(result);
     })

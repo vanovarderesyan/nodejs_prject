@@ -2,6 +2,7 @@ const db = require('../database/db');
 const collection = db.get('information');
 const objectId = require('mongodb').ObjectID;
 const getBanners = require('../service/lodash.getElemntBiId');
+const _ = require('lodash');
 
 
 class GetPromis {
@@ -51,7 +52,6 @@ class GetPromis {
     }
 
     addObject(obj, keys, models) {
-        console.log('sdfg')
         return new Promise((res, rej) => {
             models._id = objectId();
             models.title = obj.body.title;
@@ -80,8 +80,12 @@ class GetPromis {
 
     addObjectAndFile(obj, keys, models) {
         return new Promise((res, rej) => {
+            console.log('addFile')
+            
+            let listImgs = _.map(obj.files, 'path');
+            console.log(listImgs);
             models._id = objectId();
-            models.image = obj.file.path;
+            models.image = listImgs;
             models.title = obj.body.title;
             models.description = obj.body.description;
             models.languege = obj.body.languege;
@@ -175,7 +179,7 @@ class GetPromis {
                             status: 'ok'
                         })
                     }
-                });
+            });
         })
     }
 }
