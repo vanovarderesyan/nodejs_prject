@@ -1,9 +1,10 @@
+'use strict'
 const db = require('../database/db');
 const collection = db.get('information');
 const objectId = require('mongodb').ObjectID;
 const getBanners = require('../service/lodash.getElemntBiId');
 const _ = require('lodash');
-
+const fs = require('fs');
 
 class GetPromis {
     get(languege, keys) {
@@ -60,7 +61,6 @@ class GetPromis {
             models.isactive = obj.body.isactive;
             let ObjectAdd = {};
             ObjectAdd[keys] = models;
-            console.log(ObjectAdd)
             collection.update({}, { $push: ObjectAdd }, (err) => {
                 if (err) {
                     rej({
@@ -70,7 +70,7 @@ class GetPromis {
                 } else {
                     res({
                         status: 'ok',
-                        _id : models._id
+                        _id: models._id
                     })
                 }
             })
@@ -78,21 +78,13 @@ class GetPromis {
         })
     }
 
-    addObjectAndFile(obj, keys, models) {
+    addFile(obj, keys, models) {
         return new Promise((res, rej) => {
-            console.log('addFile')
-            
-            let listImgs = _.map(obj.files, 'path');
-            console.log(listImgs);
-            models._id = objectId();
-            models.image = listImgs;
-            models.title = obj.body.title;
-            models.description = obj.body.description;
-            models.languege = obj.body.languege;
-            models.isactive = obj.body.isactive;
-            let ObjectAdd = {};
-            ObjectAdd[keys] = models;
-            collection.update({}, { $push: ObjectAdd }, (err) => {
+            let objectImgSet = {};
+            let idObj = {};
+            objectImgSet[`${keys}.$.image`] = obj.file.path;
+            idObj[`${keys}._id`] = objectId(obj.body.id);
+            collection.update(idObj, { $set: objectImgSet }, (err) => {
                 if (err) {
                     rej({
                         status: 'faild',
@@ -101,11 +93,10 @@ class GetPromis {
                 } else {
                     res({
                         status: 'ok',
-                        _id : models._id
+                        _id: models._id
                     })
                 }
             })
-
         })
     }
 
@@ -128,11 +119,12 @@ class GetPromis {
         })
     }
 
-    edit(req, keys,ObjectUpdate,id) {
+    edit(req, keys, ObjectUpdate, id) {
         return new Promise((res, rej) => {
+            let ObjectUpdate = {}
             let idArray = `${keys}._id`;
-            let idObj = { _id: objectId('5a8fd2c33d6d2422170ae68b') };
-            idObj[`${keys}._id`] = objectId(id);
+            let idObj = {};
+            idObj[`${keys}._id`] = objectId(req.body.id);
             (req.body.title) ? ObjectUpdate[`${keys}.$.title`] = req.body.title : false;
             (req.body.description) ? ObjectUpdate[`${keys}.$.description`] = req.body.description : false;
             (req.body.isactive) ? ObjectUpdate[`${keys}.$.isactive`] = req.body.isactive : false;
@@ -154,32 +146,47 @@ class GetPromis {
         })
     }
 
-    editFile(req, keys,ObjectUpdate,id) {
-        console.log('editFile');
+    editFile(obj, keys, ObjectUpdate, id) {
         return new Promise((res, rej) => {
-            let idArray = `${keys}._id`;
-            let idObj = { _id: objectId('5a8fd2c33d6d2422170ae68b') };
-            idObj[`${keys}._id`] = objectId(id);
-            (req.body.title) ? ObjectUpdate[`${keys}.$.title`] = req.body.title : false;
-            (req.body.description) ? ObjectUpdate[`${keys}.$.description`] = req.body.description : false;
-            (req.body.isactive) ? ObjectUpdate[`${keys}.$.isactive`] = req.body.isactive : false;
-            (req.body.languege) ? ObjectUpdate[`${keys}.$.languege`] = req.body.languege : false;
-            ObjectUpdate[`${keys}.$.image`] = req.file.path;
-            console.log(ObjectUpdate)
-            collection.update(idObj,
+            collection.aggregate([
+                { $match: {} },
                 {
-                    $set: ObjectUpdate
-                }, (err) => {
-                    if (err) {
-                        rej({
-                            status: 'faild',
-                        });
-                    } else {
-                        res({
-                            status: 'ok'
-                        })
+                    $graphLookup: {
+                        from: 'information',
+                        startWith: '$banners',
+                        connectFromField: 'banners',
+                        connectToField: '_id',
+                        as: 'finish'
                     }
-            });
+                },
+                { $project: { 'banners': 1 } }
+            ],(err,result)=>{
+                let objectOldImg = _.find(result[0].banners, function(o) {
+                    if(o._id == obj.body.id){
+                        return o;
+                    }
+                })
+                if(objectOldImg.image.length > 10){
+                    fs.unlink(objectOldImg.image)
+                }
+            })
+            let objectImgSet = {};
+            let idObj = {};
+            objectImgSet[`${keys}.$.image`] = obj.file.path;
+            idObj[`${keys}._id`] = objectId(obj.body.id);
+            collection.update(idObj, { $set: objectImgSet }, (err) => {
+                if (err) {
+                    rej({
+                        status: 'faild',
+                        err
+                    })
+                } else {
+                    res({
+                        status: 'ok',
+                        _id: obj.body.id
+                    })
+                }
+            })
         })
     }
 }

@@ -31,8 +31,8 @@ class BannersService {
         return GetPromis.addObject(obj,'banners',bannersModel);
     }
 
-    addObjectAndFile(obj) {
-        return GetPromis.addObjectAndFile(obj,'banners',bannersModel);
+    addFile(obj) {
+        return GetPromis.addFile(obj,'banners',bannersModel);
     }
 
     remove(id) {
