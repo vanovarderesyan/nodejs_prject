@@ -2,6 +2,13 @@ const ServiceRouter = require('express').Router();
 const ServiveService = require('../service/service.service');
 const upload = require('./multer/upload');
 
+const validateService = require('./middleware_validate/service.validate');
+
+ServiceRouter.use('/',upload.upload.single('file'),(req,res,next)=>{
+    console.log('upload');
+    validateService(req,res,next);
+})
+
 ServiceRouter.get('/:languege',(req,res)=>{
     ServiveService.get(req.params.languege)
     .then((result)=>{

@@ -19,11 +19,16 @@ class ServiceDescriptionService {
                 { $project: { 'service_description': 1 } }
             ])
                 .then((result) => {
-                    if (result[0].service_description[0].languege === languege) {
-                        resolve(result[0].service_description);
-                    } else {
-                        console.log('bla bla')
-                        resolve('can not this languege')
+                    console.log(result)
+                    let resultLanguege = true;
+                    for(let i in result[0].service_description){
+                        if (result[0].service_description[i].languege === languege) {
+                            resultLanguege = false;
+                            resolve(result[0].service_description[i]);
+                        }
+                    }
+                    if(resultLanguege){
+                        reject('not fount this language');
                     }
                 })
                 .catch((err) => (

@@ -26,10 +26,16 @@ class GeneralService {
                 (req.body.e_mail_info) ? objectMail['e_mail_info'] = req.body.e_mail_info : false;
                 collection.update({}, { $set: objectMail })
                     .then(() => {
-                        resolve('ok');
+                        resolve({
+                            status : 'ok',
+                            result : objectMail
+                        });
                     })
                     .catch((err) => {
-                        reject(err);
+                        reject({
+                            status : 'faild',
+                            err
+                        });
                     })
             }
         })

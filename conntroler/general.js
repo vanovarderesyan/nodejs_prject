@@ -1,5 +1,10 @@
 const GeneralRouter = require('express').Router();
 const GeneralService = require('../service/general.service');
+const validateGeneral = require('./middleware_validate/general.validate');
+
+GeneralRouter.use('/',(req,res,next)=>{
+    validateGeneral(req,res,next);
+})
 
 GeneralRouter.get('/',(req,res)=>{
     GeneralService.get()
@@ -11,7 +16,7 @@ GeneralRouter.get('/',(req,res)=>{
     })
 })
 
-GeneralRouter.put('/',(req,res)=>{
+GeneralRouter.put('/edit',(req,res)=>{
     GeneralService.edit(req)
     .then((result)=>{
         res.send((result))

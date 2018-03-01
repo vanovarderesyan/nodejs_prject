@@ -49,7 +49,7 @@ BannersRouter.post('/add/file', (req, res) => {
     })
 });
 
-BannersRouter.delete('/',(req,res)=>{
+BannersRouter.delete('/remove',(req,res)=>{
     BannersService.remove(req.body.id)
     .then((result)=>{
         res.send(result);
@@ -59,7 +59,7 @@ BannersRouter.delete('/',(req,res)=>{
     })
 });
 
-BannersRouter.put('/',(req,res)=>{
+BannersRouter.put('/object',(req,res)=>{
     BannersService.edit(req)
     .then((result)=>{
         res.send(result);

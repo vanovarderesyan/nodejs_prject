@@ -1,165 +1,825 @@
 {
-    "swagger": "2.0",
-    "info": {
-      "version": "1.0.0",
-      "title": "Sample spec",
-      "description": "Sample spec for Swagger",
-      "termsOfService": "http://swagger.io/terms/"
-    },
-    "basePath": "/",
-    "tags" : [
-      {"name": "Tag1", 
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Sample spec",
+    "description": "Sample spec for Swagger",
+    "termsOfService": "http://swagger.io/terms/"
+  },
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "annaniks-site",
       "description": "API for something"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/banners": {
+      "get": {
+        "tags": [
+          "Banners"
+        ],
+        "description": "Gets all banners",
+        "operationId": "localhost:4000/banners",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "All",
+            "schema": {
+              "$ref": "#/definitions/bannersGetAll"
+            }
+          }
+        }
       }
-    ],
-    "schemes": [
-      "http"
-    ],
-    "consumes": [
-      "application/json"
-    ],
-    "produces": [
-      "application/json"
-    ],
-    "paths": {
-      "/banners": {
-         "get": {
-            "tags": ["Tag 1"],
-            "description": "Gets all banners",
-            "operationId": "localhost:4000/banners",
-            "produces": [
-              "application/json"
-            ],            
-            "responses": {
-              "200": {
-                "description": "All",
-                "schema": {
-                   "$ref": "#/definitions/response"
-                }
-              }
-            }
-          }
-      },
-      "/path/to/method/{someVariable}": {
-          "delete":{
-            "tags":["Tag1"],
-            "description":"Deletes a something",
-            "operationId":"delete",
-            "produces": [
-              "application/json"
-            ],
-            "parameters":[
-                {
-                  "name": "someVariable",
-                  "in": "path",
-                  "description": "ID to delete",
-                  "required": true,
-                  "type": "string"
-                }
-              ],
-            "responses": {
-              "200": {
-                "description": "delete response",
-                "schema":{
-                  "$ref":"#/definitions/deleteRes"
-                }
-              }
-            }
-          },
-        "get":{
-            "tags": [ "Tag1"],
-            "description": "Returns the status of something",
-            "operationId": "findById",
-            "produces": [
-              "application/json"
-            ],
-            "parameters": [
-                {
-                  "name": "ID",
-                  "in": "path",
-                  "description": "ID to fetch",
-                  "required": true,
-                  "type": "string"
-                }
-              ],
-          "responses": {
-              "200": {
-                "description": "response",
-                "schema": {
-                  "$ref": "#/definitions/response1"
-                }
-              }
-            }
-          }
-        }
     },
-    "definitions": {
-      "create": {
-        "properties": {
-          "eventId": {
-            "required":true,
-            "type": "string",
-            "example": "mathmaticial"
-          },
-          "numberRequired": {
-            "required":true,
-            "type":"integer",
-            "format": "int64",
-            "example": 500
-          } 
+    "/banners/{languege}": {
+      "get": {
+        "tags": [
+          "Banners"
+        ],
+        "description": "Gets all banners",
+        "operationId": "localhost:4000/banners/:languge",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "languege",
+            "in": "path",
+            "description": "Language to banners",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All"
+          }
         }
-      },
-      "response": {
-          "properties": {
-              "description": {
-                "required": true,
-                "type" : "string",
-                "example" : ""
-              },
-              "title": {
-                "required":true,
-                "type": "string",
-                "example": ""
-              },
-              "language":{
-                  "required":true,
-                  "type":"string",
-                  "example":"arm"
-              },
-              "isActive":{
-                  "required":true,
-                  "type":"boolean",
-                  "example":true  
-              },
-              "image" : {
-                "required" : true,
-                "type" : "array",
-                "example" : ".ppg" 
-
-              }
+      }
+    },
+    "/banners/add": {
+      "post": {
+        "tags": [
+          "Banners"
+        ],
+        "description": "Gets all banners",
+        "operationId": "localhost:4000/banners/add",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Language to banners",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/bannersAdd"
+            }
           }
-      },
+        ],
+        "responses": {
+          "200": {
+            "description": "All",
+            "schema": {
+              "$ref": "#/definitions/bannersAdd"
+            }
+          }
+        }
+      }
+    },
+    "/banners/add/file": {
+      "post": {
+        "x-swagger-router-controller": "images",
+        "operationId": "localhost:4000/banners/add/file",
+        "tags": [
+          "Banners"
+        ],
+        "description": "Upload image",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "type": "file",
+            "description": "Image information",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Id to banners",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/bannersIdMongoDb"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Invalid request.",
+            "schema": {
+              "$ref": "Error"
+            }
+          },
+          "200": {
+            "description": "Successful request.",
+            "schema": {
+              "id": "string"
+            }
+          }
+        }
+      }
+    },
+    "/banners/object": {
+      "put": {
+        "tags": [
+          "Banners"
+        ],
+        "description": "Gets all banners",
+        "operationId": "localhost:4000/banners",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Edit json to banners",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/bannersEditObject"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All",
+            "schema": {
+              "$ref": "#/definitions/bannersEditObject"
+            }
+          }
+        }
+      }
+    },
+    "/banners/file": {
+      "put": {
+        "x-swagger-router-controller": "images",
+        "operationId": "localhost:4000/banners/add/file",
+        "tags": [
+          "Banners"
+        ],
+        "description": "Upload image",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "type": "file",
+            "description": "Image information",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Id to banners",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/bannersIdMongoDb"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Invalid request.",
+            "schema": {
+              "$ref": "Error"
+            }
+          },
+          "200": {
+            "description": "Successful request.",
+            "schema": {
+              "id": "string"
+            }
+          }
+        }
+      }
+    },
+    "/banners/remove": {
       "delete": {
-          "properties": {
-              "jobID": {
-                "required": true,
-                "type" : "string",
-                "example" : "234344234234"
-              },
-              "status" : {
-                "required": true,
-                "type": "string",
-                "example": "deleted"
-              }
+        "tags": [
+          "Banners"
+        ],
+        "description": "Deletes a something",
+        "operationId": "localhost:4000/banners/remove",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "ID to delete",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/bannersDelete"
+            }
           }
-      },
-      "400error" : {
-         "properties": {
-          "message": {
-            "type": "string",
-            "example" : "400 Bad Request"
+        ],
+        "responses": {
+          "200": {
+            "description": "delete response",
+            "schema": {
+              "$ref": "#/definitions/deleteRes"
+            }
           }
+        }
+      }
+    },
+    "/service": {
+      "get": {
+        "tags": [
+          "Service"
+        ],
+        "description": "Gets all service",
+        "operationId": "localhost:4000/service",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "All",
+            "schema": {
+              "$ref": "#/definitions/serviceGetAll"
+            }
+          }
+        }
+      }
+    },
+    "/service/{languege}": {
+      "get": {
+        "tags": [
+          "Service"
+        ],
+        "description": "Gets all service",
+        "operationId": "localhost:4000/service/:languge",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "languege",
+            "in": "path",
+            "description": "Language to service",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All"
+          }
+        }
+      }
+    },
+    "/service/add": {
+      "post": {
+        "tags": [
+          "Service"
+        ],
+        "description": "Gets all service",
+        "operationId": "localhost:4000/service/add",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Language to service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/serviceAdd"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All",
+            "schema": {
+              "$ref": "#/definitions/serviceAdd"
+            }
+          }
+        }
+      }
+    },
+    "/service/add/file": {
+      "post": {
+        "x-swagger-router-controller": "images",
+        "operationId": "localhost:4000/service/add/file",
+        "tags": [
+          "Service"
+        ],
+        "description": "Upload image",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "type": "file",
+            "description": "Image information",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Id to service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/serviceIdMongoDb"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Invalid request.",
+            "schema": {
+              "$ref": "Error"
+            }
+          },
+          "200": {
+            "description": "Successful request.",
+            "schema": {
+              "id": "string"
+            }
+          }
+        }
+      }
+    },
+    "/service/object": {
+      "put": {
+        "tags": [
+          "Service"
+        ],
+        "description": "Gets all service",
+        "operationId": "localhost:4000/service",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Edit json to service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/serviceEditObject"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All",
+            "schema": {
+              "$ref": "#/definitions/serviceEditObject"
+            }
+          }
+        }
+      }
+    },
+    "/service/file": {
+      "put": {
+        "x-swagger-router-controller": "images",
+        "operationId": "localhost:4000/service/file",
+        "tags": [
+          "Service"
+        ],
+        "description": "Upload image",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "type": "file",
+            "description": "Image information",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Id to service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/serviceIdMongoDb"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "Invalid request.",
+            "schema": {
+              "$ref": "Error"
+            }
+          },
+          "200": {
+            "description": "Successful request.",
+            "schema": {
+              "id": "string"
+            }
+          }
+        }
+      }
+    },
+    "/service/remove": {
+      "delete": {
+        "tags": [
+          "Service"
+        ],
+        "description": "Deletes a something",
+        "operationId": "localhost:4000/service/remove",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "ID to delete",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/serviceDelete"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "delete response",
+            "schema": {
+              "$ref": "#/definitions/deleteRes"
+            }
+          }
+        }
+      }
+    },
+    "/general" : {
+      "get" : {
+        "tags" : [
+          "General"
+        ],
+        "description": "Gets all general",
+        "operationId": "localhost:4000/general",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "All",
+            "schema": {
+              "$ref": "#/definitions/generalGetAll"
+            }
+          }
+        }
+      }
+    },
+    "/general/edit" : {
+      "put" :{
+        "tags" : [
+          "General"
+        ],
+        "description": "Gets all general",
+        "operationId": "localhost:4000/general/edit",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "mail to general",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/generalEdit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All",
+            "schema": {
+              "$ref": "#/definitions/generalEdit"
+            }
+          }
+        }
+      }
+    },
+  "/service_description/{languege}" : {
+    "get" : {
+      "tags": [
+        "Service_description"
+      ],
+      "description": "Gets all service_description this language",
+      "operationId": "localhost:4000/service_description/:languege",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "name": "languege",
+          "in": "path",
+          "description": "Language to service_description",
+          "required": true,
+          "example" : "arm"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "All"
+        }
+      }
+    }
+  },
+  "/service_description" : {
+    "post": {
+      "tags" : [
+        "Service_description"
+      ]
+    }
+  },
+  "/service_description/edit" : {
+    "put" : {
+      "tags" : [
+        "Service_description"
+      ]
+    }
+  },
+  "/service_description/remove" : {
+    "delete" : {
+      "tags" :[ 
+        "Service_description"
+      ]
+    }
+  }
+},
+  "definitions": {
+    "create": {
+      "properties": {
+        "eventId": {
+          "required": true,
+          "type": "string",
+          "example": "mathmaticial"
+        },
+        "numberRequired": {
+          "required": true,
+          "type": "integer",
+          "format": "int64",
+          "example": 500
+        }
+      }
+    },
+    "bannersIdMongoDb": {
+      "properties": {
+        "id": {
+          "required": true,
+          "type": "objectId",
+          "example": "5a969d028dd62a57804ef17b"
+        }
+      }
+    },
+    "bannersEditObject": {
+      "properties": {
+        "title": {
+          "required": false,
+          "type": "string",
+          "example": "title"
+        },
+        "description": {
+          "required": false,
+          "type": "string",
+          "example": "descriprion"
+        },
+        "isactive": {
+          "required": false,
+          "type": "boolean",
+          "example": true
+        },
+        "languege": {
+          "required": false,
+          "type": "string",
+          "example": "arm"
+        },
+        "id": {
+          "required": true,
+          "type": "string",
+          "example": ""
+        }
+      }
+    },
+    "bannersAdd": {
+      "properties": {
+        "description": {
+          "required": true,
+          "type": "string",
+          "example": ""
+        },
+        "title": {
+          "required": true,
+          "type": "string",
+          "example": ""
+        },
+        "languege": {
+          "required": true,
+          "type": "string",
+          "example": "arm"
+        },
+        "isactive": {
+          "required": true,
+          "type": "boolean",
+          "example": "true"
+        }
+      }
+    },
+    "bannersGetAll": {
+      "properties": {
+        "description": {
+          "required": true,
+          "type": "string",
+          "example": ""
+        },
+        "title": {
+          "required": true,
+          "type": "string",
+          "example": ""
+        },
+        "languege": {
+          "required": true,
+          "type": "string",
+          "example": "arm"
+        },
+        "isactive": {
+          "required": true,
+          "type": "boolean",
+          "example": true
+        },
+        "image": {
+          "required": true,
+          "type": "string",
+          "example": ".ppg"
+        }
+      }
+    },
+    "bannersDelete": {
+      "properties": {
+        "id": {
+          "required": true,
+          "type": "string",
+          "example": "234344234234"
+        }
+      }
+    },
+    "serviceIdMongoDb": {
+      "properties": {
+        "id": {
+          "required": true,
+          "type": "objectId",
+          "example": "5a969d028dd62a57804ef17b"
+        }
+      }
+    },
+    "serviceEditObject": {
+      "properties": {
+        "title": {
+          "required": false,
+          "type": "string",
+          "example": "title"
+        },
+        "description": {
+          "required": false,
+          "type": "string",
+          "example": "descriprion"
+        },
+        "isactive": {
+          "required": false,
+          "type": "boolean",
+          "example": true
+        },
+        "languege": {
+          "required": false,
+          "type": "string",
+          "example": "arm"
+        },
+        "id": {
+          "required": true,
+          "type": "string",
+          "example": ""
+        }
+      }
+    },
+    "serviceAdd": {
+      "properties": {
+        "description": {
+          "required": true,
+          "type": "string",
+          "example": ""
+        },
+        "title": {
+          "required": true,
+          "type": "string",
+          "example": ""
+        },
+        "languege": {
+          "required": true,
+          "type": "string",
+          "example": "arm"
+        },
+        "isactive": {
+          "required": true,
+          "type": "boolean",
+          "example": "true"
+        }
+      }
+    },
+    "serviceGetAll": {
+      "properties": {
+        "description": {
+          "required": true,
+          "type": "string",
+          "example": ""
+        },
+        "title": {
+          "required": true,
+          "type": "string",
+          "example": ""
+        },
+        "languege": {
+          "required": true,
+          "type": "string",
+          "example": "arm"
+        },
+        "isactive": {
+          "required": true,
+          "type": "boolean",
+          "example": true
+        },
+        "image": {
+          "required": true,
+          "type": "string",
+          "example": ".ppg"
+        }
+      }
+    },
+    "serviceDelete": {
+      "properties": {
+        "id": {
+          "required": true,
+          "type": "string",
+          "example": "234344234234"
+        }
+      }
+    },
+    "generalEdit":{
+      "properties" : {
+        "e_mail_concat" : {
+          "required" : false,
+          "type" : "email",
+          "example" : "concat@gmail.com"
+        },
+        "e_mail_hr" : {
+          "required" : false,
+          "type" : "email",
+          "example" : "hr@gmail.com"
+        },
+        "e_mail_info" : {
+          "required" : false,
+          "type" : "email",
+          "example" : "info@gmail.com"
+        }
+      }
+    },
+    "400error": {
+      "properties": {
+        "message": {
+          "type": "string",
+          "example": "400 Bad Request"
         }
       }
     }
   }
+}

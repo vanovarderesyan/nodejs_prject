@@ -1,6 +1,10 @@
 const ServiceDescriptionRouter = require('express').Router();
 const ServiceDescriptionService = require('../service/service.description.service');
+const validateServiceDescription = require('./middleware_validate/service.description.validate');
 
+ServiceDescriptionRouter.use('/',(req,res,next)=>{
+    validateServiceDescription(req,res,next);
+})
 
 ServiceDescriptionRouter.get('/:languege',(req,res)=>{
     ServiceDescriptionService.get(req.params.languege)
@@ -22,7 +26,7 @@ ServiceDescriptionRouter.post('/',(req,res)=>{
     })
 })
 
-ServiceDescriptionRouter.put('/',(req,res)=>{
+ServiceDescriptionRouter.put('/edit',(req,res)=>{
     ServiceDescriptionService.put(req)
     .then((result)=>{
         res.send(result);
@@ -32,7 +36,7 @@ ServiceDescriptionRouter.put('/',(req,res)=>{
     })
 })
 
-ServiceDescriptionRouter.delete('/',(req,res)=>{
+ServiceDescriptionRouter.delete('/remove',(req,res)=>{
 
 })
 

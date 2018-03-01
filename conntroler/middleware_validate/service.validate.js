@@ -1,4 +1,4 @@
-const bannerJson = require('../../models/banners.json');
+const serviceJson = require('../../models/service.json');
 const _ = require('lodash');
 
 let Validator = require('validator-json');
@@ -52,7 +52,7 @@ function get(req, res, next) {
                 if(req.file && req.body.id){
                         next()
                 }else{
-                    res.send('input to file and id banners object')
+                    res.send('input to file and id service object')
                 }
             }else{
                 res.send(`Cannot POST${req.url}`)
@@ -95,7 +95,7 @@ function get(req, res, next) {
                 if(req.body.id){
                     next();
                 }else{
-                    res.send('input to banners id');
+                    res.send('input to service id');
                 }
             }else{
                 res.send(`Cannot POST${req.url}`);     
