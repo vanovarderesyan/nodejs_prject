@@ -77,12 +77,16 @@ class GetPromis {
         })
     }
 
-    addFile(obj, keys, models) {
+    addFile(obj, keys) {
         return new Promise((res, rej) => {
+            console.log('dsfsgh')
             let objectImgSet = {};
             let idObj = {};
+            console.log(obj.body.id)
             objectImgSet[`${keys}.$.image`] = obj.file.path;
             idObj[`${keys}._id`] = objectId(obj.body.id);
+            console.log(idObj)
+            console.log(objectImgSet)
             collection.update(idObj, { $set: objectImgSet }, (err) => {
                 if (err) {
                     rej({
@@ -91,8 +95,8 @@ class GetPromis {
                     })
                 } else {
                     res({
-                        status: 'ok',
-                        _id: models._id
+                        status: 'dfsgdh',
+                        _id: obj.body.id
                     })
                 }
             })
@@ -102,8 +106,11 @@ class GetPromis {
     remove(id, keys) {
         return new Promise((res, rej) => {
             let removeObject = {};
+            console.log(objectId(id))
             removeObject[keys] = { _id: objectId(id) };
+            
             collection.update({}, { $pull: removeObject }, (err) => {
+                console.log(err);
                 if (err) {
                     rej({
                         status: 'faild',
@@ -120,7 +127,6 @@ class GetPromis {
 
     edit(req, keys, ObjectUpdate, id) {
         return new Promise((res, rej) => {
-            let ObjectUpdate = {}
             let idArray = `${keys}._id`;
             let idObj = {};
             idObj[`${keys}._id`] = objectId(req.body.id);
@@ -145,22 +151,28 @@ class GetPromis {
         })
     }
 
-    editFile(obj, keys, ObjectUpdate, id) {
+    editFile(obj, keys) {
         return new Promise((res, rej) => {
+            let grapObject = {};
+            let projectObject = {};
+            let objectImgSet = {};
+            let idObj = {};
+
+            grapObject.from = 'information';
+            grapObject.startWith = `$${keys}`;
+            grapObject.connectFromField = `${keys}`;
+            grapObject.connectToField = '_id';
+            grapObject.as = 'finish';
+            projectObject[`${keys}`] = 1;
+            
             collection.aggregate([
                 { $match: {} },
                 {
-                    $graphLookup: {
-                        from: 'information',
-                        startWith: '$banners',
-                        connectFromField: 'banners',
-                        connectToField: '_id',
-                        as: 'finish'
-                    }
+                    $graphLookup: grapObject
                 },
-                { $project: { 'banners': 1 } }
+                { $project: projectObject }
             ],(err,result)=>{
-                let objectOldImg = _.find(result[0].banners, function(o) {
+                let objectOldImg = _.find(result[0][`${keys}`], function(o) {
                     if(o._id == obj.body.id){
                         return o;
                     }
@@ -169,8 +181,7 @@ class GetPromis {
                     fs.unlink(objectOldImg.image)
                 }
             })
-            let objectImgSet = {};
-            let idObj = {};
+
             objectImgSet[`${keys}.$.image`] = obj.file.path;
             idObj[`${keys}._id`] = objectId(obj.body.id);
             collection.update(idObj, { $set: objectImgSet }, (err) => {

@@ -24,11 +24,17 @@ class PorfolioService {
                 { $project: { 'portfolio': 1 } }
             ])
                 .then((result) => {
-                    if (result[0].portfolio[0].languege === languege && result[0].portfolio[0].isactive === 'bool') {
-                        resolve(result[0].portfolio);
-                    } else {
-                        resolve('can not this languege')
+                    let arrayThisLanguage = []
+                    for(let i in result[0].portfolio){
+                        if (result[0].portfolio[i].languege === languege && result[0].portfolio[i].isactive == true) {
+                           arrayThisLanguage.push(result[0].portfolio[i]);
+                        } 
                     }
+                    if(arrayThisLanguage.length){
+                        resolve(arrayThisLanguage);
+                    }else{
+                        reject('faild can not this language or isactiv false');
+                    }   
                 })
                 .catch((err) => (
                     reject(err)
@@ -61,29 +67,24 @@ class PorfolioService {
     }
 
     add(keys, req) {
-        models.tags = req.body.tags;
-        models.platforms = req.body.platforms;
+        (req.body.tags) ? models.tags = req.body.tags : false;
+        (req.body.platforms) ? models.platforms = req.body.platforms : false;
         return GetPromis.addObject(req, 'portfolio', models);
     }
 
     addFile(keys, req) {
-        (req.body.platforms) ? models.platforms = (req.body.platforms).split(',') : models.platforms = [];
-        (req.body.tags) ? models.tags = (req.body.tags).split(',') : models.tags = [];
-         return GetPromis.addObjectAndFile(req, 'portfolio', models)
+         return GetPromis.addFile(req, 'portfolio')
     }
             
     edit(req) {
         let obj = {};
-        (req.body.tags) ? obj['portfolio.$.title'] = req.body.title : false;
+        (req.body.tags) ? obj['portfolio.$.tags'] = req.body.tags : false;
         (req.body.platforms) ? obj['portfolio.$.platforms'] = req.body.platforms : false;
         return GetPromis.edit(req, 'portfolio', obj, req.params.id);
     }
 
     editFile(req) {
-        let obj = {};
-        (req.body.tags) ? obj['portfolio.$.tags'] = (req.body.tags).split(',') : false;
-        (req.body.platforms) ? obj['portfolio.$.platforms'] = (req.body.platforms).split(',') : false;
-        return GetPromis.editFile(req, 'portfolio', obj, req.body.id);
+        return GetPromis.editFile(req, 'portfolio');
     }
 
     remove(keys, id) {

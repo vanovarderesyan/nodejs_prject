@@ -19,16 +19,15 @@ class ServiceDescriptionService {
                 { $project: { 'service_description': 1 } }
             ])
                 .then((result) => {
-                    console.log(result)
                     let resultLanguege = true;
-                    for(let i in result[0].service_description){
+                    for (let i in result[0].service_description) {
                         if (result[0].service_description[i].languege === languege) {
                             resultLanguege = false;
                             resolve(result[0].service_description[i]);
                         }
                     }
-                    if(resultLanguege){
-                        reject('not fount this language');
+                    if (resultLanguege) {
+                        reject('can not this languege');
                     }
                 })
                 .catch((err) => (
@@ -40,13 +39,10 @@ class ServiceDescriptionService {
     post(languege, obj) {
         return new Promise((resolve, reject) => {
             this.get(languege).then((result) => {
-                console.log(result);
-                if (result !== "can not this languege") {
-                    reject('faild this languege already eating ')
-                } else {
-                    collection.update({}, { $push: { service_description: obj } });
-                    resolve('ok');
-                }
+                reject('faild this languege already eating ')
+            }).catch((err) => {
+                collection.update({}, { $push: { service_description: obj } });
+                resolve('ok');
             })
         })
     }
@@ -54,38 +50,42 @@ class ServiceDescriptionService {
     put(req) {
         return new Promise((res, rej) => {
             this.get(req.body.languege).then((result) => {
-                console.log(result);
-                if (result === "can not this languege") {
-                    rej('faild this languege already eating ')
-                } else {
-                    let idObj = { _id: objectId('5a8e92f719d8cf34517797f8') };
-                    let ObjectUpdate = {};
-                    idObj['service_description.languege'] = req.body.languege;
-                    (req.body.description) ? ObjectUpdate['service_description.$.description'] = req.body.description : false;
-                    (req.body.languege) ? ObjectUpdate['service_description.$.languege'] = req.body.languege : false;
-                    collection.update(idObj, { $set: ObjectUpdate });
-                    rej('ok');
-                }
+                let idObj = { };
+                let ObjectUpdate = {};
+                idObj['service_description.languege'] = req.body.languege;
+                (req.body.description) ? ObjectUpdate['service_description.$.description'] = req.body.description : false;
+                (req.body.languege) ? ObjectUpdate['service_description.$.languege'] = req.body.languege : false;
+                collection.update(idObj, { $set: ObjectUpdate });
+                rej('ok');
             })
+                .catch((err) => {
+                    rej(err);
+                })
         })
     }
 
     remove(languege) {
         return new Promise((res, rej) => {
-            let removeObject = {};
-            removeObject[keys] = { "languege": languege };
-            collection.update({}, { $pull: removeObject }, (err) => {
-                if (err) {
-                    rej({
-                        status: 'faild',
-                        err
+            this.get(languege)
+                .then((result) => {
+                    let removeObject = {};
+                    removeObject['service_description'] = { "languege": languege };
+                    collection.update({}, { $pull: removeObject }, (err) => {
+                        if (err) {
+                            rej({
+                                status: 'faild',
+                                err
+                            })
+                        } else {
+                            res({
+                                status: 'ok'
+                            })
+                        }
                     })
-                } else {
-                    res({
-                        status: 'ok'
-                    })
-                }
-            })
+                })
+                .catch((err) => {
+                    rej(err);
+                })
         })
     }
 }

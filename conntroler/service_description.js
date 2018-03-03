@@ -37,7 +37,15 @@ ServiceDescriptionRouter.put('/edit',(req,res)=>{
 })
 
 ServiceDescriptionRouter.delete('/remove',(req,res)=>{
-
+    console.log('frgdt')
+    console.log(req.body.languege)
+    ServiceDescriptionService.remove(req.body.languege)
+    .then((result)=>{
+        res.send(result);
+    })
+    .catch((err)=>{
+        res.send(err);
+    })
 })
 
 module.exports = ServiceDescriptionRouter;

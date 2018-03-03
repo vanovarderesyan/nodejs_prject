@@ -150,7 +150,7 @@
           "Banners"
         ],
         "description": "Gets all banners",
-        "operationId": "localhost:4000/banners",
+        "operationId": "localhost:4000/banners/object",
         "produces": [
           "application/json"
         ],
@@ -178,7 +178,7 @@
     "/banners/file": {
       "put": {
         "x-swagger-router-controller": "images",
-        "operationId": "localhost:4000/banners/add/file",
+        "operationId": "localhost:4000/banners/file",
         "tags": [
           "Banners"
         ],
@@ -479,9 +479,9 @@
         }
       }
     },
-    "/general" : {
-      "get" : {
-        "tags" : [
+    "/general": {
+      "get": {
+        "tags": [
           "General"
         ],
         "description": "Gets all general",
@@ -499,9 +499,9 @@
         }
       }
     },
-    "/general/edit" : {
-      "put" :{
-        "tags" : [
+    "/general/edit": {
+      "put": {
+        "tags": [
           "General"
         ],
         "description": "Gets all general",
@@ -530,54 +530,238 @@
         }
       }
     },
-  "/service_description/{languege}" : {
-    "get" : {
-      "tags": [
-        "Service_description"
-      ],
-      "description": "Gets all service_description this language",
-      "operationId": "localhost:4000/service_description/:languege",
-      "produces": [
-        "application/json"
-      ],
-      "parameters": [
-        {
-          "name": "languege",
-          "in": "path",
-          "description": "Language to service_description",
-          "required": true,
-          "example" : "arm"
+    "/service_description/{languege}": {
+      "get": {
+        "tags": [
+          "Service_description"
+        ],
+        "description": "Gets all service_description this language",
+        "operationId": "localhost:4000/service_description/:languege",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "languege",
+            "in": "path",
+            "description": "Language to service_description",
+            "required": true,
+            "example": "arm"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All"
+          }
         }
-      ],
-      "responses": {
-        "200": {
-          "description": "All"
+      }
+    },
+    "/service_description": {
+      "post": {
+        "tags": [
+          "Service_description"
+        ],
+        "description": "Gets all service",
+        "operationId": "localhost:4000/service_description",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Language to service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/serviceDescriptionAdd"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All",
+            "schema": {
+              "$ref": "#/definitions/serviceDescriptionAdd"
+            }
+          }
         }
+      }
+    },
+    "/service_description/edit": {
+      "put": {
+        "tags": [
+          "Service_description"
+        ],
+        "description": "Gets all service",
+        "operationId": "localhost:4000/service_description/edit",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Language to service",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/serviceDescriptionAdd"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All",
+            "schema": {
+              "$ref": "#/definitions/serviceDescriptionAdd"
+            }
+          }
+        }
+      }
+    },
+    "/service_description/remove": {
+      "delete": {
+        "tags": [
+          "Service_description"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "operationId": "localhost:4000/service_description/remove",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "languege to delete",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/serviceDescriptionRrmove"
+            }
+            
+          }
+        ]
+      }
+    },
+    "/portfolio" : {
+      "get" : {
+        "tags" :[
+          "Portfolio" 
+        ]
+      }
+    },
+    "/portfolio/{languege}" : {
+      "get" : {
+        "tags" :[
+          "Portfolio" 
+        ]
+      }
+    },
+    "/portfolio/add" : {
+      "post" : {
+        "tags" :[
+          "Portfolio" 
+        ]
+      }
+    },
+    "/portfolio/add/file" : {
+      "post" : {
+        "tags" :[
+          "Portfolio" 
+        ]
+      }
+    },
+    "/portfolio/edit/object" : {
+      "put" : {
+        "tags" :[
+          "Portfolio" 
+        ]
+      }
+    },
+    "/portfolio/edit/file" : {
+      "put" : {
+        "tags" :[
+          "Portfolio" 
+        ]
+      }
+    },
+    "/portfolio/remove" : {
+      "delete" : {
+        "tags" :[
+          "Portfolio" 
+        ]
+      }
+    },
+    "/portfolio/remove/tags" : {
+      "delete" : {
+        "tags" :[
+          "Portfolio" 
+        ]
+      }
+    },
+    "/portfolio/remove/platform" : {
+      "delete" : {
+        "tags" :[
+          "Portfolio" 
+        ]
+      }
+    },
+    "/tags/add" : {
+      "post" : {
+        "tags" : [
+          "Tags"
+        ]
+      }
+    },
+    "/tags/edit" : {
+      "put" : {
+        "tags" : [
+          "Tags"
+        ]
+      }
+    },
+    "/tags/remove" : {
+      "delete" : {
+        "tags" : [
+          "Tags"
+        ]
+      }
+    },
+    "/platform/add" : {
+      "post" : {
+        "tags" : [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/edit" : {
+      "put" : {
+        "tags" : [
+          "Platform"
+        ]
+      }
+    },
+    "/platform/remove" : {
+      "delete" : {
+        "tags" : [
+          "Platform"
+        ]
+      }
+    },
+    "/gallery/add" : {
+      "put":{
+        "tags":[
+          "Gallery"
+        ]
+      }
+    }
+    ,
+    "/gallery/remove" : {
+      "delete" : {
+        "tags" :[
+          "Gallery"
+        ]
       }
     }
   },
-  "/service_description" : {
-    "post": {
-      "tags" : [
-        "Service_description"
-      ]
-    }
-  },
-  "/service_description/edit" : {
-    "put" : {
-      "tags" : [
-        "Service_description"
-      ]
-    }
-  },
-  "/service_description/remove" : {
-    "delete" : {
-      "tags" :[ 
-        "Service_description"
-      ]
-    }
-  }
-},
   "definitions": {
     "create": {
       "properties": {
@@ -794,22 +978,45 @@
         }
       }
     },
-    "generalEdit":{
+    "generalEdit": {
+      "properties": {
+        "e_mail_concat": {
+          "required": false,
+          "type": "email",
+          "example": "concat@gmail.com"
+        },
+        "e_mail_hr": {
+          "required": false,
+          "type": "email",
+          "example": "hr@gmail.com"
+        },
+        "e_mail_info": {
+          "required": false,
+          "type": "email",
+          "example": "info@gmail.com"
+        }
+      }
+    },
+    "serviceDescriptionAdd": {
+      "properties": {
+        "languege": {
+          "type": "string",
+          "required": true,
+          "example": "arm"
+        },
+        "description": {
+          "type": "string",
+          "required": true,
+          "example": "descriprion"
+        }
+      }
+    },
+    "serviceDescriptionRrmove" : {
       "properties" : {
-        "e_mail_concat" : {
-          "required" : false,
-          "type" : "email",
-          "example" : "concat@gmail.com"
-        },
-        "e_mail_hr" : {
-          "required" : false,
-          "type" : "email",
-          "example" : "hr@gmail.com"
-        },
-        "e_mail_info" : {
-          "required" : false,
-          "type" : "email",
-          "example" : "info@gmail.com"
+        "languege": {
+          "type": "string",
+          "required": true,
+          "example": "arm"
         }
       }
     },

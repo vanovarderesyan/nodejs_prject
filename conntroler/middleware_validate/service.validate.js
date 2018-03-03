@@ -17,8 +17,6 @@ let schemaFalse = {
     description: { type: 'string', required: false },
     title: { type: 'string', required: false },
 } 
-// let passValidator = new Validator(object4pass, schema, 'object4npass');
-// let passErrors = passValidator.validate();
 
 function get(req, res, next) {
     console.log(req.method)

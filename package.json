@@ -13,6 +13,7 @@
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "is-empty": "^1.2.0",
+    "isarray": "^2.0.4",
     "json-validation": "^1.0.4",
     "json-validator": "0.0.34",
     "lodash": "^4.17.5",
